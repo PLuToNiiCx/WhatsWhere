@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="WhatsWhere">
+<title>WhatsWhere</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f3ee;--card:#fff;--ink:#14160f;--mute:#6b6f62;--line:#e1e0d6;--acc:#4d7c0f;--accfg:#fff;--glow:rgba(77,124,15,.18);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b0d08;--card:#141810;--ink:#f1f3e8;--mute:#8d927f;--line:#262b1d;--acc:#c6f432;--accfg:#10140a;--glow:rgba(198,244,50,.16);color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0b0d08;--card:#141810;--ink:#f1f3e8;--mute:#8d927f;--line:#262b1d;--acc:#c6f432;--accfg:#10140a;--glow:rgba(198,244,50,.16);color-scheme:dark}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:radial-gradient(900px 500px at 80% -10%,var(--glow),transparent 60%),var(--bg);color:var(--ink);font:400 16px/1.45 "Space Grotesk",system-ui,-apple-system,sans-serif;min-height:100vh}
+.wrap{max-width:1100px;margin:0 auto;padding:18px clamp(14px,4vw,32px) 90px}
+header{display:flex;align-items:center;gap:12px;justify-content:space-between;margin-bottom:8px}
+.logo{font-weight:700;letter-spacing:-.03em;font-size:15px;display:flex;gap:8px;align-items:center}.logo i{width:10px;height:10px;border-radius:50%;background:var(--acc);box-shadow:0 0 14px var(--acc)}
+h1{font-size:clamp(22px,6.4vw,72px);line-height:.98;letter-spacing:-.045em;margin:18px 0 20px;font-weight:700;white-space:nowrap}
+h1 em{font-style:normal;color:var(--acc)}
+h2{font-size:22px;letter-spacing:-.02em;margin:0}
+.search{display:flex;gap:8px;margin-bottom:22px}
+input,select,textarea{font:inherit;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 15px;width:100%;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--acc);box-shadow:0 0 0 3px var(--glow)}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;padding:11px 18px;font-weight:500}
+button.p{background:var(--acc);color:var(--accfg);border-color:transparent;font-weight:700}
+button.g{background:transparent}button.d{color:#d9480f}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}.sp{justify-content:space-between}
+.tabs{display:flex;gap:6px;margin:0 0 18px}.tabs button.on{background:var(--ink);color:var(--bg)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px;cursor:pointer;transition:.2s}
+.card:hover{transform:translateY(-3px);border-color:var(--acc);box-shadow:0 10px 40px var(--glow)}
+.card .ic{font-size:34px}.card b{display:block;font-size:19px;letter-spacing:-.02em;margin-top:10px}.card span{color:var(--mute);font-size:14px}
+.items{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:12px 0 4px}
+.it{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--bg);cursor:pointer}
+.it img{width:100%;aspect-ratio:4/3;object-fit:cover;display:block}.it .ph{aspect-ratio:4/3;display:grid;place-items:center;font-size:28px;color:var(--mute)}
+.it div.t{padding:9px 11px;font-size:14px;font-weight:500}.it small{display:block;color:var(--mute);font-weight:400}
+.sec{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:18px;margin-bottom:14px}
+.hit{display:flex;gap:12px;align-items:center;padding:13px;border:1px solid var(--line);border-radius:16px;background:var(--card);margin-bottom:8px;cursor:pointer}
+.hit b{display:block}.hit span{color:var(--acc);font-size:14px}.hit img{width:48px;height:48px;border-radius:10px;object-fit:cover}
+.pl{perspective:1400px;height:min(62vh,520px);display:grid;place-items:center;overflow:hidden}
+.iso{display:grid;grid-template-columns:repeat(var(--c,3),clamp(90px,22vw,170px));gap:10px;transform:rotateX(58deg) rotateZ(-38deg);transform-style:preserve-3d}
+.tile{aspect-ratio:1;border-radius:12px;background:var(--card);border:1px solid var(--acc);display:grid;place-items:center;text-align:center;font-size:13px;font-weight:700;padding:6px;cursor:pointer;box-shadow:6px 6px 0 var(--glow),12px 12px 0 var(--line);transition:.25s;transform:translateZ(0)}
+.tile:hover{transform:translateZ(30px);background:var(--acc);color:var(--accfg)}.tile span{display:block;font-size:26px}.tile small{font-weight:400;opacity:.7}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:grid;place-items:end center;z-index:20;padding:0}
+.box{background:var(--bg);width:min(560px,100%);max-height:92vh;overflow:auto;border-radius:26px 26px 0 0;padding:22px 20px calc(22px + env(safe-area-inset-bottom,0px));border:1px solid var(--line)}
+@media(min-width:700px){.modal{place-items:center}.box{border-radius:26px}}
+label{display:block;font-size:13px;color:var(--mute);margin:12px 0 5px}
+video{width:100%;border-radius:16px;background:#000}.hint{color:var(--mute);font-size:14px}
+.empty{color:var(--mute);padding:26px;text-align:center;border:1px dashed var(--line);border-radius:18px}
+.back{margin-bottom:6px}.bc{color:var(--mute);font-size:14px}
+.fp{position:relative;width:100%;max-width:900px;margin:12px auto;border:2px solid var(--line);border-radius:12px;background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:calc(100%/12) calc(100%/var(--h));transition:transform .5s}
+.fp.d3{transform:rotateX(55deg) rotateZ(-40deg) scale(.8);transform-style:preserve-3d;margin:70px auto}
+.rm{position:absolute;border:2px solid var(--acc);background:var(--card);border-radius:8px;display:grid;place-content:center;text-align:center;font-size:12px;font-weight:700;cursor:pointer;overflow:hidden;line-height:1.25}
+.rm span{font-size:22px}.rm small{font-weight:400;color:var(--mute)}.d3 .rm{box-shadow:5px 5px 0 var(--glow),10px 10px 0 var(--line)}
+.ed .rm{touch-action:none;cursor:move}.rz{position:absolute;right:0;bottom:0;width:24px;height:24px;background:var(--acc);border-radius:8px 0 6px 0;cursor:nwse-resize}
+.tabs button.on2,.row button.on{background:var(--ink);color:var(--bg)}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jsbarcode/3.11.6/JsBarcode.all.min.js"></script>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+let S={rooms:[]},view={t:'home'},tab='lijst',q='',modal=null,db=null,assets=null,ref=null,sync='lokaal',busy=false;
+const $=id=>document.getElementById(id),uid=()=>Math.random().toString(36).slice(2,9);
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const ICONS=['🛋️','🍳','🛏️','🚿','🧰','🚗','🌳','📦','👕','🧸'];
+const TYPES=['Kast','Lade','Plank','Doos','Gereedschapskist','Rek','Anders'];
+function ld(){try{const x=JSON.parse(localStorage.getItem('inv')||'null');if(x&&x.rooms)S=x}catch(e){}}
+async function save(){try{localStorage.setItem('inv',JSON.stringify(S))}catch(e){}
+ if(ref){try{await ref.set({json:JSON.stringify(S)});sync='gesynchroniseerd'}catch(e){sync='lokaal'}}}
+async function init(){ld();render();
+ try{const c=window.claude&&await claude.use('db');if(c){db=c;ref=db.doc('inv/main');
+  const s=await ref.get();if(s.exists&&s.data().json){S=JSON.parse(s.data().json)}else if(S.rooms.length){await ref.set({json:JSON.stringify(S)})}
+  sync='gesynchroniseerd';if(ref.onSnapshot)ref.onSnapshot(sn=>{if(sn.exists&&sn.data().json&&!modal){const j=sn.data().json;if(j!==JSON.stringify(S)){S=JSON.parse(j);render()}}});render()}}catch(e){}
+ try{assets=window.claude?await claude.use('assets'):null}catch(e){}}
+const room=id=>S.rooms.find(r=>r.id==id),cnt=r=>r.places.reduce((n,p)=>n+p.items.length,0);
+function all(){const o=[];S.rooms.forEach(r=>r.places.forEach(p=>p.items.forEach(i=>o.push({i,r,p}))));return o}
+function render(){const a=$('app');let h=`<header><div class="logo" onclick="go()" role="button" tabindex="0" style="cursor:pointer"><i></i>WhatsWhere</div><div class="row"><span class="hint">${sync}</span><button class="g" aria-label="Opties" onclick="showTheme()">⚙️</button><button class="g" onclick="scan()">▥ Scan</button></div></header>`;
+ if(view.t=='home'){
+  h+=`<h1>Nooit meer iets <em>kwijt.</em></h1><div class="search"><input id="q" placeholder="Zoek een voorwerp, bijv. 'paspoort'…" value="${esc(q)}" oninput="q=this.value;res()"></div><div id="res"></div>`;
+  h+=`<div id="main">${q?'':quick()+home()}</div>`}
+ else{const r=room(view.r);if(!r){view={t:'home'};return render()}h+=roomView(r)}
+ a.innerHTML=h+(modal||'');setTimeout(drawBc,0);if(q&&view.t=='home'){res()}}
+function res(){const m=$('main'),x=$('res');if(!q){x.innerHTML='';m.style.display='';return}
+ m.style.display='none';const k=q.toLowerCase(),f=all().filter(o=>(o.i.name+' '+(o.i.note||'')+' '+(o.i.code||'')).toLowerCase().includes(k));
+ x.innerHTML=f.length?f.map(o=>`<div class="hit" onclick="go('${o.r.id}')">${o.i.photo?`<img src="${o.i.photo}">`:'<div style="font-size:26px">📦</div>'}<div><b>${esc(o.i.name)}</b><span>${esc(o.r.name)} → ${esc(o.p.name)}${o.i.vak?' → '+esc(o.i.vak):''}</span></div></div>`).join(''):'<div class="empty">Niets gevonden.</div>'}
+function home(){let h=`<div class="tabs"><button class="${tab=='lijst'?'on':''}" onclick="tab='lijst';render()">Ruimtes</button><button class="${tab=='3d'?'on':''}" onclick="tab='3d';render()">Plattegrond</button></div>`;
+ if(!S.rooms.length)return h+`<div class="empty">Nog geen ruimtes. Begin met de eerste, bijvoorbeeld "Woonkamer".<br><br><button class="p" onclick="addRoom()">+ Ruimte toevoegen</button></div>`;
+ if(tab=='3d')h+=plan();
+ else h+=`<div class="grid">${S.rooms.map(r=>`<div class="card" onclick="go('${r.id}')"><div class="ic">${r.icon}</div><b>${esc(r.name)}</b><span>${r.places.length} plekken · ${cnt(r)} items</span></div>`).join('')}</div>`;
+ return h+`<p><button class="p" onclick="addRoom()">+ Ruimte</button></p>`}
+function roomView(r){let h=`<button class="g back" onclick="go()">← Alle ruimtes</button><div class="row sp"><h2>${r.icon} ${esc(r.name)}</h2><div class="row"><button class="g" onclick="addRoom('${r.id}')">Wijzig</button><button class="p" onclick="addPlace('${r.id}')">+ Plek</button></div></div><br>`;
+ if(!r.places.length)h+=`<div class="empty">Voeg een kast, lade of kist toe.</div>`;
+ r.places.forEach(p=>{h+=`<div class="sec"><div class="row sp"><div><b style="font-size:18px">${esc(p.name)}</b> <span class="bc">${esc(p.type||'')}</span></div><div class="row"><button class="g" onclick="addPlace('${r.id}','${p.id}')">Wijzig</button><button class="p" onclick="addItem('${r.id}','${p.id}')">+ Item</button></div></div>${grp(r,p)}</div>`});return h}
+function itm(r,p,i){return `<div class="it" onclick="addItem('${r.id}','${p.id}','${i.id}')">${i.photo?`<img src="${i.photo}" loading="lazy">`:'<div class="ph">📦</div>'}<div class="t">${esc(i.name)}${i.note?`<small>${esc(i.note)}</small>`:''}</div></div>`}
+function grp(r,p){if(!p.items.length)return '<div class="items"><span class="hint">Nog leeg.</span></div>';const vs=[...new Set(p.items.map(i=>i.vak||''))].sort((a,b)=>!a?-1:!b?1:a.localeCompare(b));return vs.map(v=>`${v?`<div class="bc" style="margin-top:12px;font-weight:700">▸ ${esc(v)}</div>`:''}<div class="items">${p.items.filter(i=>(i.vak||'')==v).map(i=>itm(r,p,i)).join('')}</div>`).join('')}
+function go(r){view=r?{t:'room',r}:{t:'home'};q='';render();scrollTo(0,0)}
+function open(h){modal=`<div class="modal" onclick="if(event.target===this)close_()"><div class="box">${h}</div></div>`;render()}
+function close_(){stopCam();modal=null;render()}
+function addRoom(id){const r=id?room(id):null;open(`<h2>${r?'Ruimte wijzigen':'Nieuwe ruimte'}</h2><label>Naam</label><input id="n" value="${esc(r?.name||'')}" placeholder="Bijv. Garage"><label>Icoon</label><div class="row">${ICONS.map(i=>`<button class="g" onclick="this.parentNode.dataset.v='${i}';[...this.parentNode.children].forEach(b=>b.style.borderColor='');this.style.borderColor='var(--acc)'" style="font-size:22px;padding:8px 12px">${i}</button>`).join('')}</div><br><div class="row sp"><button class="p" onclick="sRoom('${id||''}')">Opslaan</button>${r?`<button class="d g" onclick="del('r','${id}')">Verwijder</button>`:''}<button class="g" onclick="close_()">Annuleer</button></div>`)}
+function sRoom(id){const n=$('n').value.trim();if(!n)return;const ic=document.querySelector('.box .row[data-v]')?.dataset.v;
+ if(id){const r=room(id);r.name=n;if(ic)r.icon=ic}else S.rooms.push({id:uid(),name:n,icon:ic||'📦',places:[]});modal=null;save();render()}
+function addPlace(rid,pid){const p=pid?room(rid).places.find(x=>x.id==pid):null;open(`<h2>${p?'Plek wijzigen':'Nieuwe plek'}</h2><label>Naam</label><input id="n" value="${esc(p?.name||'')}" placeholder="Bijv. Bovenste kast links"><label>Soort</label><select id="t" onchange="$('tn').style.display=this.value=='__new'?'block':'none'">${types().map(t=>`<option ${p?.type==t?'selected':''}>${esc(t)}</option>`).join('')}<option value="__new">+ Nieuwe soort…</option></select><input id="tn" placeholder="Naam van de nieuwe soort" style="display:none;margin-top:8px"><br><br><div class="row sp"><button class="p" onclick="sPlace('${rid}','${pid||''}')">Opslaan</button>${p?`<button class="d g" onclick="del('p','${rid}','${pid}')">Verwijder</button>`:''}<button class="g" onclick="close_()">Annuleer</button></div>`)}
+function sPlace(rid,pid){const n=$('n').value.trim();if(!n)return;const r=room(rid);if(pid){const p=r.places.find(x=>x.id==pid);p.name=n;p.type=$('t').value}else r.places.push({id:uid(),name:n,type:$('t').value,items:[]});modal=null;save();render()}
+let cur=null;
+function addItem(rid,pid,iid,code){const r=room(rid),p=r.places.find(x=>x.id==pid),i=iid?p.items.find(x=>x.id==iid):null;cur={photo:i?.photo||'',code:i?.code||code||''};
+ open(`<h2>${i?'Item wijzigen':'Nieuw item'}</h2><label>Wat is het?</label><input id="n" value="${esc(i?.name||'')}" placeholder="Bijv. Boormachine"><label>Notitie</label><input id="no" value="${esc(i?.note||'')}"><label>Vak of plank (optioneel)</label><input id="vk" list="vl" value="${esc(i?.vak||'')}" placeholder="Bijv. Plank 2"><datalist id="vl">${[...new Set(p.items.map(x=>x.vak).filter(Boolean))].map(v=>`<option value="${esc(v)}">`).join('')}</datalist><label>Barcode</label><div class="row"><input id="bc" value="${esc(cur.code)}" style="flex:1"><button class="g" onclick="scan('${rid}','${pid}',true)">▥ Scan</button></div><label>Foto</label><div id="pv">${cur.photo?`<img src="${cur.photo}" style="width:100%;border-radius:14px">`:''}</div><input type="file" accept="image/*" capture="environment" onchange="photo(this)"><br><br><div class="row sp"><button class="p" id="sv" onclick="sItem('${rid}','${pid}','${iid||''}')">Opslaan</button>${i?`<button class="d g" onclick="del('i','${rid}','${pid}','${iid}')">Verwijder</button>`:''}<button class="g" onclick="close_()">Annuleer</button></div>`)}
+function small(f){return new Promise(res=>{const im=new Image();im.onload=()=>{const s=Math.min(1,900/Math.max(im.width,im.height)),c=document.createElement('canvas');c.width=im.width*s;c.height=im.height*s;c.getContext('2d').drawImage(im,0,0,c.width,c.height);c.toBlob(b=>res(b),'image/jpeg',.75)};im.src=URL.createObjectURL(f)})}
+async function photo(el){const f=el.files[0];if(!f)return;busy=true;$('sv').disabled=true;const b=await small(f);let u=null;
+ try{if(assets)u=(await assets.upload(b)).url}catch(e){}
+ if(!u){u=await new Promise(r=>{const x=new FileReader;x.onload=()=>r(x.result);x.readAsDataURL(b)})}
+ cur.photo=u;$('pv').innerHTML=`<img src="${u}" style="width:100%;border-radius:14px">`;$('sv').disabled=false;busy=false}
+function sItem(rid,pid,iid){const n=$('n').value.trim();if(!n)return;const p=room(rid).places.find(x=>x.id==pid),d={name:n,note:$('no').value.trim(),code:$('bc').value.trim(),vak:$('vk').value.trim(),photo:cur.photo};
+ if(iid)Object.assign(p.items.find(x=>x.id==iid),d);else p.items.push({id:uid(),...d});modal=null;save();render()}
+function del(t,a,b,c){if(!confirm('Zeker weten?'))return;if(t=='r')S.rooms=S.rooms.filter(r=>r.id!=a),view={t:'home'};if(t=='p'){const r=room(a);r.places=r.places.filter(p=>p.id!=b)}if(t=='i'){const p=room(a).places.find(p=>p.id==b);p.items=p.items.filter(i=>i.id!=c)}modal=null;save();render()}
+let stream=null,raf=0;
+function stopCam(){cancelAnimationFrame(raf);stream&&stream.getTracks().forEach(t=>t.stop());stream=null}
+async function scan(rid,pid,fill){const keep=fill?{n:$('n').value,no:$('no').value}:null;
+ open(`<h2>Barcode scannen</h2><video id="v" playsinline muted style="display:none"></video><p class="hint" id="sm">Maak een foto van de barcode, of typ de code.</p><input type="file" accept="image/*" capture="environment" onchange="scanPhoto(this)"><br><br><div class="row"><input id="man" placeholder="Of typ de code"><button class="p" onclick="found($('man').value)">OK</button></div><br><button class="g" onclick="close_()">Sluiten</button>`);
+ window._ctx={rid,pid,fill,keep};
+ try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});const v=$('v');v.srcObject=stream;v.style.display='block';await v.play();
+  let det=null;if('BarcodeDetector' in window)det=new BarcodeDetector();else{await new Promise(r=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js';s.onload=r;s.onerror=r;document.head.appendChild(s)});if(window.ZXing){const rd=new ZXing.BrowserMultiFormatReader();const c=document.createElement('canvas');det={detect:async()=>{c.width=v.videoWidth;c.height=v.videoHeight;c.getContext('2d').drawImage(v,0,0);try{const r=rd.decodeFromCanvas?rd.decodeFromCanvas(c):null;return r?[{rawValue:r.getText()}]:[]}catch(e){return[]}}}}}
+  if(!det){$('sm').textContent='Scannen werkt niet op dit toestel. Typ de code hieronder.';return}
+  const tick=async()=>{if(!stream)return;try{const r=await det.detect(v);if(r.length){found(r[0].rawValue);return}}catch(e){}raf=setTimeout(tick,300)};tick()
+ }catch(e){const s=$('sm');if(s)s.textContent='Livecamera niet beschikbaar. Maak een foto van de barcode, of typ de code.'}}
+function found(c){c=(c||'').trim();if(!c)return;const x=window._ctx||{};stopCam();
+ const hit=all().find(o=>o.i.code===c);
+ if(x.fill){modal=null;addItem(x.rid,x.pid,null,c);setTimeout(()=>{$('n').value=x.keep.n;$('no').value=x.keep.no},0);return}
+ if(hit){modal=null;view={t:'room',r:hit.r.id};render();alert(`Bekend: ${hit.i.name}\nLigt in ${hit.r.name} → ${hit.p.name}`);return}
+ const opts=S.rooms.flatMap(r=>r.places.map(p=>`<option value="${r.id}|${p.id}">${esc(r.name)} → ${esc(p.name)}</option>`)).join('');
+ open(`<h2>Nieuw voorwerp</h2><p class="hint">Code ${esc(c)} is nog niet bekend. Waar leg je het neer?</p>${opts?`<select id="loc">${opts}</select><br><br><button class="p" onclick="const[a,b]=$('loc').value.split('|');modal=null;addItem(a,b,null,'${esc(c)}')">Verder</button>`:'<div class="empty">Maak eerst een ruimte en plek aan.</div>'} <button class="g" onclick="close_()">Annuleer</button>`)}
+let p3=false,edit=false,dr=null;
+function plan(){let b=0;S.rooms.forEach(r=>{if(r.x!=null)b=Math.max(b,r.y+r.h)});S.rooms.forEach(r=>{if(r.x==null){r.x=0;r.y=b;r.w=3;r.h=3;b+=3}});
+ const H=Math.max(6,...S.rooms.map(r=>r.y+r.h));
+ return `<div class="row"><button class="${p3?'on':''}" onclick="p3=!p3;edit=false;render()">3D-weergave</button>${p3?'':`<button class="${edit?'p':''}" onclick="edit=!edit;render()">${edit?'Klaar':'Indeling aanpassen'}</button>`}</div><div style="perspective:1400px;overflow:hidden"><div class="fp ${p3?'d3':''} ${edit?'ed':''}" id="fp" data-h="${H}" style="aspect-ratio:12/${H};--h:${H}">${S.rooms.map(r=>`<div class="rm" data-id="${r.id}" style="left:${r.x/12*100}%;top:${r.y/H*100}%;width:${r.w/12*100}%;height:${r.h/H*100}%" ${edit?'':`onclick="go('${r.id}')"`}><div><span>${r.icon}</span><br>${esc(r.name)}<br><small>${cnt(r)} items</small></div>${edit?'<i class="rz"></i>':''}</div>`).join('')}</div></div><p class="hint" style="text-align:center">${edit?'Sleep een ruimte om te verplaatsen, sleep de hoek om het formaat te wijzigen.':'Tik op een ruimte om te openen.'}</p>`}
+document.addEventListener('pointerdown',e=>{const el=e.target.closest('.rm');if(!edit||!el)return;e.preventDefault();const r=room(el.dataset.id),f=$('fp'),b=f.getBoundingClientRect(),H=+f.dataset.h;dr={el,r,sx:e.clientX,sy:e.clientY,x:r.x,y:r.y,w:r.w,h:r.h,rz:!!e.target.closest('.rz'),cw:b.width/12,ch:b.height/H,H}});
+document.addEventListener('pointermove',e=>{if(!dr)return;const d=dr,dx=Math.round((e.clientX-d.sx)/d.cw),dy=Math.round((e.clientY-d.sy)/d.ch),r=d.r;
+ if(d.rz){r.w=Math.max(1,Math.min(12-r.x,d.w+dx));r.h=Math.max(1,d.h+dy)}else{r.x=Math.max(0,Math.min(12-r.w,d.x+dx));r.y=Math.max(0,d.y+dy)}
+ const s=d.el.style;s.left=r.x/12*100+'%';s.top=r.y/d.H*100+'%';s.width=r.w/12*100+'%';s.height=r.h/d.H*100+'%'});
+document.addEventListener('pointerup',()=>{if(!dr)return;dr=null;save();render()});
+const inb=()=>S.inbox||(S.inbox=[]);
+function all(){const o=[];S.rooms.forEach(r=>r.places.forEach(p=>p.items.forEach(i=>o.push({i,r,p}))));inb().forEach(i=>o.push({i,r:{id:'',name:'Nog niet geplaatst'},p:{name:'wijs een plek toe'}}));return o}
+function quick(){return `<div class="row" style="margin:-6px 0 18px"><button class="p" onclick="addItem('inbox','inbox')">+ Voorwerp toevoegen</button></div>`+(inb().length?`<div class="sec"><b style="font-size:18px">📥 Nog te plaatsen</b> <span class="bc">tik op een item om het een plek te geven</span><div class="items">${inb().map(i=>itm({id:'inbox'},{id:'inbox'},i)).join('')}</div></div>`:'')}
+function srcOf(rid,pid){return rid=='inbox'?{items:inb()}:room(rid)?.places.find(x=>x.id==pid)}
+function addItem(rid,pid,iid,code){const p=srcOf(rid,pid)||{items:[]},i=iid?p.items.find(x=>x.id==iid):null;cur={photo:i?.photo||'',code:i?.code||code||''};const cv=rid+'|'+pid;
+ const opts=`<option value="inbox|inbox" ${cv=='inbox|inbox'?'selected':''}>📥 Nog niet geplaatst</option>`+S.rooms.flatMap(r=>r.places.map(q=>`<option value="${r.id}|${q.id}" ${cv==r.id+'|'+q.id?'selected':''}>${esc(r.name)} → ${esc(q.name)}</option>`)).join('');
+ open(`<h2>${i?'Item wijzigen of verplaatsen':'Nieuw item'}</h2><label>Wat is het?</label><input id="n" value="${esc(i?.name||'')}" placeholder="Bijv. Boormachine"><label>Locatie</label><select id="loc" onchange="locCh()">${opts}<option value="__new">+ Nieuwe locatie…</option></select><div id="nl" style="display:none"><label>Ruimte (kies of typ een nieuwe)</label><input id="nrr" list="rl" placeholder="Bijv. Zolder"><datalist id="rl">${S.rooms.map(r=>`<option value="${esc(r.name)}">`).join('')}</datalist><label>Plek</label><input id="npp" placeholder="Bijv. Blauwe kist"><label>Soort plek</label><select id="npt">${types().map(t=>`<option>${esc(t)}</option>`).join('')}</select></div><label>Vak of plank (optioneel)</label><input id="vk" list="vl" value="${esc(i?.vak||'')}" placeholder="Bijv. Plank 2"><datalist id="vl">${[...new Set(p.items.map(x=>x.vak).filter(Boolean))].map(v=>`<option value="${esc(v)}">`).join('')}</datalist><label>Notitie</label><input id="no" value="${esc(i?.note||'')}"><label>Barcode</label><div class="row"><input id="bc" value="${esc(cur.code)}" style="flex:1" oninput="drawBc()"><button class="g" onclick="scan('${rid}','${pid}',true)">▥ Scan</button><button class="g" onclick="genBc()">Maak code</button></div><svg id="bcs" style="display:block;width:100%;max-width:320px;height:auto;margin-top:10px;border-radius:12px"></svg><label>Foto</label><div id="pv">${cur.photo?`<img src="${cur.photo}" style="width:100%;border-radius:14px">`:''}</div><input type="file" accept="image/*" capture="environment" onchange="photo(this)"><br><br><div class="row sp"><button class="p" id="sv" onclick="sItem('${rid}','${pid}','${iid||''}')">Opslaan</button>${i?`<button class="d g" onclick="del('i','${rid}','${pid}','${iid}')">Verwijder</button>`:''}<button class="g" onclick="close_()">Annuleer</button></div>`)}
+function sItem(rid,pid,iid){const n=$('n').value.trim();if(!n)return;const d={name:n,note:$('no').value.trim(),code:$('bc').value.trim(),vak:$('vk').value.trim(),photo:cur.photo};const [tr,tp]=$('loc').value.split('|'),src=srcOf(rid,pid)||{items:[]},dst=srcOf(tr,tp)||src;
+ if(iid){const it=src.items.find(x=>x.id==iid);Object.assign(it,d);if(dst!==src&&dst.items!==src.items){src.items.splice(src.items.indexOf(it),1);dst.items.push(it)}}else dst.items.push({id:uid(),...d});
+ modal=null;save();render()}
+function del(t,a,b,c){if(!confirm(t=='i'?'Zeker weten?':'Zeker weten? De items gaan naar "Nog te plaatsen".'))return;
+ if(t=='r'){const r=room(a);r.places.forEach(p=>inb().push(...p.items));S.rooms=S.rooms.filter(x=>x.id!=a);view={t:'home'}}
+ if(t=='p'){const r=room(a),p=r.places.find(x=>x.id==b);inb().push(...p.items);r.places=r.places.filter(x=>x.id!=b)}
+ if(t=='i'){const p=srcOf(a,b),k=p.items.findIndex(i=>i.id==c);if(k>-1)p.items.splice(k,1)}
+ modal=null;save();render()}
+async function scanPhoto(el){const f=el.files[0];if(!f)return;const s=$('sm');s.textContent='Barcode wordt gelezen…';const u=URL.createObjectURL(f);let c=null;
+ try{if('BarcodeDetector' in window){const im=await createImageBitmap(f);const r=await new BarcodeDetector().detect(im);if(r.length)c=r[0].rawValue}}catch(e){}
+ if(!c){try{if(!window.ZXing)await new Promise(r=>{const x=document.createElement('script');x.src='https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js';x.onload=r;x.onerror=r;document.head.appendChild(x)});if(window.ZXing){const r=await new ZXing.BrowserMultiFormatReader().decodeFromImageUrl(u);c=r.getText()}}catch(e){}}
+ if(c)found(c);else s.textContent='Geen barcode gevonden. Probeer het dichterbij en scherp, of typ de code.'}
+function drawBc(){const el=$('bcs'),inp=$('bc');if(!el||!inp)return;el.innerHTML='';const v=inp.value.trim();if(!v||!window.JsBarcode)return;
+ const f=/^\d{13}$/.test(v)?'EAN13':/^\d{12}$/.test(v)?'UPC':/^\d{8}$/.test(v)?'EAN8':'CODE128',o={displayValue:true,height:70,margin:12,background:'#fff',lineColor:'#000',fontSize:14};
+ try{JsBarcode(el,v,{...o,format:f})}catch(e){try{JsBarcode(el,v,{...o,format:'CODE128'})}catch(e2){}}}
+function genBc(){$('bc').value='WW'+Date.now().toString(36).toUpperCase().slice(-6)+Math.random().toString(36).slice(2,4).toUpperCase();drawBc()}
+function types(){return [...new Set([...TYPES,...S.rooms.flatMap(r=>r.places.map(p=>p.type)).filter(Boolean)])]}
+function tv(){const v=$('t').value;return v=='__new'?($('tn').value.trim()||'Anders'):v}
+function sPlace(rid,pid){const n=$('n').value.trim();if(!n)return;const r=room(rid),t=tv();if(pid){const p=r.places.find(x=>x.id==pid);p.name=n;p.type=t}else r.places.push({id:uid(),name:n,type:t,items:[]});modal=null;save();render()}
+function locCh(){$('nl').style.display=$('loc').value=='__new'?'block':'none'}
+function sItem(rid,pid,iid){const n=$('n').value.trim();if(!n)return;const d={name:n,note:$('no').value.trim(),code:$('bc').value.trim(),vak:$('vk').value.trim(),photo:cur.photo};let tr,tp;
+ if($('loc').value=='__new'){const rn=$('nrr').value.trim(),pn=$('npp').value.trim();if(!rn||!pn){$('nrr').style.borderColor=rn?'':'#d9480f';$('npp').style.borderColor=pn?'':'#d9480f';return}
+  let r=S.rooms.find(x=>x.name.toLowerCase()==rn.toLowerCase());if(!r){r={id:uid(),name:rn,icon:(ICMAP.find(([re])=>re.test(rn))||[0,'📦'])[1],places:[]};S.rooms.push(r)}
+  let pl=r.places.find(x=>x.name.toLowerCase()==pn.toLowerCase());if(!pl){pl={id:uid(),name:pn,type:$('npt').value,items:[]};r.places.push(pl)}tr=r.id;tp=pl.id}
+ else [tr,tp]=$('loc').value.split('|');
+ const src=srcOf(rid,pid)||{items:[]},dst=srcOf(tr,tp)||src;
+ if(iid){const it=src.items.find(x=>x.id==iid);Object.assign(it,d);if(dst.items!==src.items){src.items.splice(src.items.indexOf(it),1);dst.items.push(it)}}else dst.items.push({id:uid(),...d});
+ modal=null;save();render()}
+const PRESETS={Lime:['#0b0d08','#141810','#f1f3e8','#c6f432'],Licht:['#f4f3ee','#ffffff','#14160f','#4d7c0f'],Oceaan:['#06111c','#0c1b2a','#e6f1fb','#38bdf8'],Zonsondergang:['#1a0b10','#2a1219','#fdeee8','#ff7a45'],Roze:['#1a0a17','#2a1226','#fdeaf7','#ff4fd8'],Paars:['#100b1e','#191230','#efe9ff','#a78bfa'],Bos:['#07130d','#0e2016','#e7f6ec','#34d399'],Goud:['#14110a','#201b0f','#f7f0dc','#fbbf24'],Rood:['#150808','#240f0f','#fdecec','#ef4444'],Zand:['#f6efe3','#fffaf1','#2b2118','#c2410c'],Munt:['#eef7f4','#ffffff','#0f2a24','#0d9488'],Hemel:['#eef4fb','#ffffff','#10243a','#2563eb'],Nacht:['#000000','#0f0f0f','#ffffff','#ffffff']};
+let TH=null;try{TH=JSON.parse(localStorage.getItem('th')||'null')}catch(e){}
+const hx=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+const mix=(a,b,t)=>'#'+hx(a).map((v,i)=>Math.round(v+(hx(b)[i]-v)*t).toString(16).padStart(2,'0')).join('');
+const lum=h=>{const[r,g,b]=hx(h);return(.299*r+.587*g+.114*b)/255};
+function applyTheme(){const s=document.documentElement.style,k=['--bg','--card','--ink','--mute','--line','--acc','--accfg','--glow','color-scheme'];
+ if(!TH){k.forEach(x=>s.removeProperty(x));return}
+ const[r,g,b]=hx(TH.acc),v={'--bg':TH.bg,'--card':TH.card,'--ink':TH.ink,'--mute':mix(TH.ink,TH.bg,.5),'--line':mix(TH.bg,TH.ink,.14),'--acc':TH.acc,'--accfg':lum(TH.acc)>.6?'#10140a':'#ffffff','--glow':`rgba(${r},${g},${b},.2)`,'color-scheme':lum(TH.bg)<.5?'dark':'light'};
+ for(const x in v)s.setProperty(x,v[x])}
+function saveTh(){try{localStorage.setItem('th',JSON.stringify(TH))}catch(e){}}
+function curTh(){if(TH)return TH;const c=matchMedia('(prefers-color-scheme: dark)').matches?PRESETS.Lime:PRESETS.Licht;return{bg:c[0],card:c[1],ink:c[2],acc:c[3]}}
+function syncPick(){const T=curTh();['bg','card','ink','acc'].forEach(k=>{const e=$('c_'+k);if(e)e.value=T[k]})}
+function setTh(n){const c=PRESETS[n];TH={bg:c[0],card:c[1],ink:c[2],acc:c[3]};applyTheme();saveTh();syncPick()}
+function cTh(k,v){TH={...curTh(),[k]:v};applyTheme();saveTh()}
+function resetTh(){TH=null;try{localStorage.removeItem('th')}catch(e){}applyTheme();syncPick()}
+function themeUI(){const T=curTh();return `<h2>Kleuren</h2><p class="hint">Kies een thema, of stel hieronder zelf elke kleur in. Dit geldt alleen voor dit toestel.</p><div class="row">${Object.entries(PRESETS).map(([n,c])=>`<button onclick="setTh('${n}')" style="background:${c[0]};color:${c[2]};border:2px solid ${c[3]};font-size:13px">${n}</button>`).join('')}</div><label>Eigen kleuren</label>${[['bg','Achtergrond'],['card','Vlakken'],['ink','Tekst'],['acc','Accent']].map(([k,l])=>`<div class="row sp" style="margin-bottom:8px"><span>${l}</span><input type="color" id="c_${k}" value="${T[k]}" oninput="cTh('${k}',this.value)" style="width:70px;height:40px;padding:2px"></div>`).join('')}<br><div class="row sp"><button class="g" onclick="resetTh()">Automatisch</button><button class="p" onclick="close_()">Klaar</button></div>`}
+function showTheme(){open(themeUI())}
+let LANG='nl';try{LANG=localStorage.getItem('lang')||'nl'}catch(e){}
+document.documentElement.lang=LANG;
+const EN={'lokaal':'local','gesynchroniseerd':'synced','Nooit meer iets':'Never lose','kwijt.':'anything.',"Zoek een voorwerp, bijv. 'paspoort'…":"Search for an item, e.g. 'passport'…",'+ Voorwerp toevoegen':'+ Add item','📥 Nog te plaatsen':'📥 To be placed','tik op een item om het een plek te geven':'tap an item to give it a place','Ruimtes':'Rooms','Plattegrond':'Floor plan','Nog geen ruimtes. Begin met de eerste, bijvoorbeeld "Woonkamer".':'No rooms yet. Start with the first one, for example "Living room".','+ Ruimte':'+ Room','3D-weergave':'3D view','Indeling aanpassen':'Edit layout','Klaar':'Done','Sleep een ruimte om te verplaatsen, sleep de hoek om het formaat te wijzigen.':'Drag a room to move it, drag the corner to resize it.','Tik op een ruimte om te openen.':'Tap a room to open it.','← Alle ruimtes':'← All rooms','Wijzig':'Edit','+ Plek':'+ Place','Voeg een kast, lade of kist toe.':'Add a cabinet, drawer or chest.','Nog leeg.':'Still empty.','Niets gevonden.':'Nothing found.','Ruimte wijzigen':'Edit room','Nieuwe ruimte':'New room','Naam':'Name','Bijv. Garage':'E.g. Garage','Icoon':'Icon','Opslaan':'Save','Verwijder':'Delete','Annuleer':'Cancel','Plek wijzigen':'Edit place','Nieuwe plek':'New place','Bijv. Bovenste kast links':'E.g. Top left cabinet','Soort':'Type','+ Nieuwe soort…':'+ New type…','Naam van de nieuwe soort':'Name of the new type','Kast':'Cabinet','Lade':'Drawer','Plank':'Shelf','Doos':'Box','Gereedschapskist':'Toolbox','Rek':'Rack','Anders':'Other','Item wijzigen of verplaatsen':'Edit or move item','Nieuw item':'New item','Wat is het?':'What is it?','Bijv. Boormachine':'E.g. Drill','Locatie':'Location','📥 Nog niet geplaatst':'📥 Not placed yet','+ Nieuwe locatie…':'+ New location…','Ruimte (kies of typ een nieuwe)':'Room (pick or type a new one)','Bijv. Zolder':'E.g. Attic','Plek':'Place','Bijv. Blauwe kist':'E.g. Blue chest','Soort plek':'Type of place','Vak of plank (optioneel)':'Compartment or shelf (optional)','Bijv. Plank 2':'E.g. Shelf 2','Notitie':'Note','Maak code':'Make code','Foto':'Photo','Barcode scannen':'Scan barcode','Maak een foto van de barcode, of typ de code.':'Take a photo of the barcode, or type the code.','Of typ de code':'Or type the code','Sluiten':'Close','Scannen werkt niet op dit toestel. Typ de code hieronder.':'Scanning does not work on this device. Type the code below.','Livecamera niet beschikbaar. Maak een foto van de barcode, of typ de code.':'Live camera not available. Take a photo of the barcode, or type the code.','Barcode wordt gelezen…':'Reading barcode…','Geen barcode gevonden. Probeer het dichterbij en scherp, of typ de code.':'No barcode found. Try again closer and in focus, or type the code.','Nieuw voorwerp':'New item','Verder':'Continue','Maak eerst een ruimte en plek aan.':'First create a room and a place.','Zeker weten?':'Are you sure?','Zeker weten? De items gaan naar "Nog te plaatsen".':'Are you sure? The items will move to "To be placed".','Opties':'Options','Taal':'Language','Kleuren':'Colors','Kies een thema, of stel hieronder zelf elke kleur in. Dit geldt alleen voor dit toestel.':'Pick a theme, or set each color yourself below. This applies to this device only.','Licht':'Light','Oceaan':'Ocean','Zonsondergang':'Sunset','Roze':'Pink','Paars':'Purple','Bos':'Forest','Goud':'Gold','Rood':'Red','Zand':'Sand','Munt':'Mint','Hemel':'Sky','Nacht':'Night','Eigen kleuren':'Custom colors','Achtergrond':'Background','Vlakken':'Surfaces','Tekst':'Text','Automatisch':'Automatic'};
+const RX=[[/^(\d+) plekken · (\d+) items$/,'$1 places · $2 items'],[/^Code (.+) is nog niet bekend\. Waar leg je het neer\?$/,'Code $1 is not known yet. Where do you put it?'],[/^Bekend: ([\s\S]+)\nLigt in ([\s\S]+)$/,'Known: $1\nLocated in $2']],PH=[['Nog niet geplaatst','Not placed yet'],['wijs een plek toe','assign a place']];
+function trs(s){if(LANG!='en'||!s)return s;const t=s.trim();if(!t)return s;let r=EN[t];if(r===undefined){for(const[re,f]of RX){if(re.test(t)){r=t.replace(re,f);break}}}
+ if(r===undefined){r=s;PH.forEach(([a,b])=>{r=r.split(a).join(b)});return r}
+ return s.replace(t,()=>r)}
+function trDom(root){if(LANG!='en')return;const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;while(n=w.nextNode()){const v=trs(n.nodeValue);if(v!==n.nodeValue)n.nodeValue=v}
+ [root,...root.querySelectorAll('[placeholder]')].forEach(e=>{const p=e.getAttribute&&e.getAttribute('placeholder');if(p){const v=trs(p);if(v!==p)e.setAttribute('placeholder',v)}})}
+new MutationObserver(m=>{if(LANG!='en')return;m.forEach(x=>{x.addedNodes.forEach(n=>{if(n.nodeType==1)trDom(n);else if(n.nodeType==3){const v=trs(n.nodeValue);if(v!==n.nodeValue)n.nodeValue=v}})})}).observe(document.body,{childList:true,subtree:true});
+const _al=window.alert.bind(window),_cf=window.confirm.bind(window);window.alert=s=>_al(trs(String(s)));window.confirm=s=>_cf(trs(String(s)));
+function settingsUI(){const b=(l,n)=>`<button class="${LANG==l?'p':'g'}" onclick="setLang('${l}')">${n}</button>`;return `<h2>Opties</h2><label>Taal</label><div class="row">${b('nl','Nederlands')}${b('en','English')}</div><br>`+themeUI().replace('<h2>Kleuren</h2>','<h2 style="font-size:18px">Kleuren</h2>')}
+function setLang(l){LANG=l;try{localStorage.setItem('lang',l)}catch(e){}document.documentElement.lang=l;modal=settingsUI();render()}
+function showTheme(){open(settingsUI())}
+const ICONS2=['🛋️','🍳','🍽️','🛏️','🧸','🚿','🚽','🧺','🚪','🧥','👕','🥫','❄️','🖥️','📚','🎮','🎸','🎨','🧰','🛠️','🚗','🚲','🌳','🪴','🏠','🪜','🍷','📦','🧳','⛺','🎄','🐾','💼','🔑'];
+const ICMAP=[[/woon|living|zit/i,'🛋️'],[/keuken|kitchen/i,'🍳'],[/eet|dining/i,'🍽️'],[/slaap|bed/i,'🛏️'],[/kinder|baby|child/i,'🧸'],[/bad|douche|shower|bath/i,'🚿'],[/toilet|wc/i,'🚽'],[/was|bijkeuken|laundry/i,'🧺'],[/garage/i,'🚗'],[/werkplaats|schuur|shed|workshop/i,'🧰'],[/fiets|bike/i,'🚲'],[/tuin|garden/i,'🌳'],[/kantoor|office|werk/i,'🖥️'],[/studeer|studie|boek|study/i,'📚'],[/zolder|attic|vliering/i,'🪜'],[/kelder|cellar|basement/i,'🍷'],[/hal|gang|hall|entree/i,'🚪'],[/garderobe|kleding|closet/i,'🧥'],[/voorraad|pantry/i,'🥫'],[/hobby|atelier/i,'🎨'],[/kerst|christmas/i,'🎄'],[/kamp|camp/i,'⛺'],[/koffer|vakantie|luggage/i,'🧳'],[/huisdier|pet/i,'🐾']];
+EN['Of typ zelf een emoji']='Or type your own emoji';
+function pickIc(v){$('ic').value=v;document.querySelectorAll('.icb').forEach(b=>{b.style.borderColor=b.dataset.i==v?'var(--acc)':''})}
+function sugIc(n){const e=$('ic');if(e.dataset.m)return;const m=ICMAP.find(([re])=>re.test(n));if(m)pickIc(m[1])}
+function addRoom(id){const r=id?room(id):null,c0=r?.icon||'📦';open(`<h2>${r?'Ruimte wijzigen':'Nieuwe ruimte'}</h2><label>Naam</label><input id="n" value="${esc(r?.name||'')}" placeholder="Bijv. Garage" oninput="sugIc(this.value)"><label>Icoon</label><input type="hidden" id="ic" value="${c0}" ${r?'data-m="1"':''}><div class="row">${ICONS2.map(i=>`<button class="g icb" data-i="${i}" onclick="$('ic').dataset.m=1;pickIc('${i}')" style="font-size:22px;padding:8px 11px;${i==c0?'border-color:var(--acc)':''}">${i}</button>`).join('')}</div><label>Of typ zelf een emoji</label><input id="ice" maxlength="4" placeholder="🙂" oninput="if(this.value){$('ic').dataset.m=1;pickIc(this.value)}"><br><div class="row sp"><button class="p" onclick="sRoom('${id||''}')">Opslaan</button>${r?`<button class="d g" onclick="del('r','${id}')">Verwijder</button>`:''}<button class="g" onclick="close_()">Annuleer</button></div>`)}
+function sRoom(id){const n=$('n').value.trim();if(!n)return;const ic=$('ic').value||'📦';if(id){const r=room(id);r.name=n;r.icon=ic}else S.rooms.push({id:uid(),name:n,icon:ic,places:[]});modal=null;save();render()}
+applyTheme();
+init();
+</script>
+</body>
+</html>
